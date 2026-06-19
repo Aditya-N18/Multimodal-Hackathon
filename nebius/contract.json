@@ -1,0 +1,57 @@
+{
+  "$schema": "EvidenceLine Nebius integration contract — hand to Person B (Shresth)",
+  "version": "1.0.0",
+  "description": "Person C analyzes one incident photo + transcript context. Called from InsForge edge function analyze-incident.",
+
+  "request": {
+    "incident_type": "car_accident | slip_fall | workplace | property_damage | other",
+    "raw_transcript": "string — voice summary of what caller reported",
+    "location": "string — reported location",
+    "image": "string — public HTTPS URL OR base64 data URI (data:image/jpeg;base64,...)"
+  },
+
+  "response": {
+    "hazard_evidence": ["string — specific visible facts, e.g. dented rear bumper"],
+    "severity": "low | medium | high",
+    "missing_evidence": ["string — what to photograph next"],
+    "matches_description": "boolean — photo plausibly matches transcript",
+    "confidence": "number 0.0–1.0"
+  },
+
+  "example_request": {
+    "incident_type": "car_accident",
+    "raw_transcript": "I was rear-ended at a stop light. I'm okay but my rear bumper is damaged.",
+    "location": "Market St and 5th, San Francisco",
+    "image": "https://example.com/photo.jpg"
+  },
+
+  "example_response": {
+    "hazard_evidence": [
+      "visible dent and scuffing on rear bumper",
+      "rear license plate partially visible"
+    ],
+    "severity": "medium",
+    "missing_evidence": [
+      "other vehicle license plate not visible",
+      "no wide shot of intersection or surrounding area"
+    ],
+    "matches_description": true,
+    "confidence": 0.87
+  },
+
+  "nebius_config": {
+    "base_url": "https://api.tokenfactory.nebius.com/v1/",
+    "recommended_model": "Qwen/Qwen2.5-VL-72B-Instruct",
+    "fallback_model": "Qwen/Qwen2-VL-72B-Instruct",
+    "response_format": "json_object",
+    "env_var": "NEBIUS_API_KEY"
+  },
+
+  "field_mapping_to_incidents_table": {
+    "hazard_evidence": "incidents.hazard_evidence (jsonb)",
+    "severity": "incidents.severity (text)",
+    "missing_evidence": "incidents.missing_evidence (jsonb)",
+    "matches_description": "store in hazard_evidence meta or separate column if added",
+    "confidence": "optional — can omit from DB for MVP"
+  }
+}
