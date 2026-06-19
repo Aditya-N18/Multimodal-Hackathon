@@ -1,0 +1,8 @@
+node_modules
+.env
+.env.local
+.env.deploy
+.insforge
+nebius/.env
+*.png
+*.jpg

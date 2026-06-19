@@ -1,0 +1,30 @@
+{
+  "name": "evidenceline-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "test:stage1": "node scripts/test-stage1.js",
+    "test:stage2": "node scripts/test-stage2-create-incident.js",
+    "test:upload-stage1": "node scripts/test-upload-stage1.js",
+    "test:analyze-stage2": "node scripts/test-analyze-stage2.js",
+    "test:check-status-stage3": "node scripts/test-check-status-stage3.js",
+    "test:full-pipeline-stage4": "node scripts/test-full-pipeline-stage4.js",
+    "test:nebius": "node scripts/test-nebius.js",
+    "test:gemini-e2e": "node scripts/test-gemini-e2e.js",
+    "test:dashboard-e2e": "node scripts/test-dashboard-e2e.js",
+    "monitor": "node scripts/monitor.js",
+    "monitor:local": "node scripts/monitor.js --local",
+    "dev": "node server/index.js",
+    "dashboard:dev": "npm run dev --prefix dashboard",
+    "dashboard:build": "npm run build --prefix dashboard"
+  },
+  "dependencies": {
+    "@insforge/sdk": "^1.4.2",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.2",
+    "multer": "^2.2.0",
+    "openai": "^6.44.0"
+  }
+}
