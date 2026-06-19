@@ -1,0 +1,85 @@
+/** Static demo data — lets you build UI before Person B's backend is live. */
+export const MOCK_INCIDENTS = [
+  {
+    id: '11111111-1111-1111-1111-111111111111',
+    created_at: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
+    updated_at: new Date(Date.now() - 1000 * 60 * 2).toISOString(),
+    call_id: 'vapi-call-demo-001',
+    caller_name: 'Sarah Chen',
+    caller_phone: '+1-555-0142',
+    incident_type: 'car_accident',
+    location: 'Oak Street & 5th Ave',
+    occurred_at: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+    immediate_danger: false,
+    other_party_info: 'Silver sedan, partial plate ABC-4__',
+    raw_transcript:
+      'Caller rear-ended at intersection. Reports minor neck stiffness but able to speak clearly. Vehicle front bumper damaged.',
+    image_urls: [
+      'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80',
+    ],
+    injury_reported: true,
+    hazard_evidence: [
+      { type: 'vehicle_damage', detail: 'Front bumper deformation visible' },
+      { type: 'road_condition', detail: 'Dry pavement, daylight' },
+    ],
+    severity: 'low',
+    missing_evidence: ['other party license plate (full)', 'wide scene photo'],
+    responder_summary:
+      'Minor rear-end collision. Caller conscious, oriented, reports mild neck discomfort. Front-end vehicle damage documented. No immediate life threat reported.',
+    case_file_summary:
+      'Single-vehicle rear-end incident at Oak St & 5th Ave. Caller Sarah Chen. Other party: silver sedan. Photos confirm front bumper damage. Injury reported but not assessed. Recommend medical evaluation if symptoms persist.',
+    status: 'report_ready',
+    case_number: 'EV-0042',
+  },
+  {
+    id: '22222222-2222-2222-2222-222222222222',
+    created_at: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+    updated_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    call_id: 'vapi-call-demo-002',
+    caller_name: 'James Rivera',
+    caller_phone: '+1-555-0198',
+    incident_type: 'slip_fall',
+    location: 'Riverview Market, aisle 4',
+    occurred_at: new Date(Date.now() - 1000 * 60 * 50).toISOString(),
+    immediate_danger: false,
+    other_party_info: 'Store manager notified on site',
+    raw_transcript:
+      'Caller slipped on wet floor near produce section. No visible serious injury. Knee pain reported.',
+    image_urls: [],
+    injury_reported: true,
+    hazard_evidence: null,
+    severity: null,
+    missing_evidence: ['floor/wet area photo', 'injury photo'],
+    responder_summary: null,
+    case_file_summary: null,
+    status: 'awaiting_photos',
+    case_number: 'EV-0041',
+  },
+  {
+    id: '33333333-3333-3333-3333-333333333333',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    call_id: 'vapi-call-demo-003',
+    caller_name: 'Unknown',
+    caller_phone: '+1-555-0100',
+    incident_type: 'car_accident',
+    location: 'Highway 101 northbound',
+    occurred_at: new Date().toISOString(),
+    immediate_danger: false,
+    other_party_info: null,
+    raw_transcript: 'Call in progress — safety check completed, gathering details.',
+    image_urls: [],
+    injury_reported: false,
+    hazard_evidence: null,
+    severity: null,
+    missing_evidence: null,
+    responder_summary: null,
+    case_file_summary: null,
+    status: 'new',
+    case_number: 'EV-0043',
+  },
+]
+
+export function getMockIncident(id) {
+  return MOCK_INCIDENTS.find((inc) => inc.id === id) ?? null
+}
