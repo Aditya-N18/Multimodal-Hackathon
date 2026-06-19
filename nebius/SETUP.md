@@ -106,6 +106,8 @@ python verify_key.py
 python test_smoke.py
 ```
 
+Uses **local** `samples/dented_car.png` (base64). Do not rely on random internet URLs — Nebius often returns `500` when fetching remote images.
+
 **Good output:** JSON with `hazard_evidence`, `severity`, etc.
 
 ### Test C — Your own photo

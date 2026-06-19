@@ -17,10 +17,11 @@ import mimetypes
 import os
 import re
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
-from openai import OpenAI
+from openai import OpenAI, InternalServerError, APIStatusError
 
 from prompts import SYSTEM_PROMPT, build_user_message
 
@@ -129,7 +130,7 @@ def analyze_incident(
     client = OpenAI(base_url=BASE_URL, api_key=key)
     user_text = build_user_message(incident_type, raw_transcript, location)
 
-    response = client.chat.completions.create(
+    payload = dict(
         model=model,
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
@@ -145,6 +146,20 @@ def analyze_incident(
         temperature=0.2,
         response_format={"type": "json_object"},
     )
+
+    last_error: Exception | None = None
+    for attempt in range(3):
+        try:
+            response = client.chat.completions.create(**payload)
+            break
+        except (InternalServerError, APIStatusError) as exc:
+            last_error = exc
+            status = getattr(exc, "status_code", None)
+            if status not in (500, 502, 503, 429) or attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
+    else:
+        raise last_error  # type: ignore[misc]
 
     raw = response.choices[0].message.content or ""
     parsed = extract_json(raw)

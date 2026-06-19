@@ -1,16 +1,25 @@
-"""Quick smoke test with a public image URL — no local photos needed."""
+"""Smoke test — uses local sample photo (remote URLs often fail on Nebius)."""
 
 import json
 import os
 import sys
+from pathlib import Path
 
-from analyze_incident import analyze_incident, load_dotenv
+from analyze_incident import analyze_incident, image_path_to_data_uri, load_dotenv
 
-# Must end in .jpg/.png — Nebius rejects URLs without image extension
-TEST_IMAGE = (
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/"
-    "Car_accident.jpg/800px-Car_accident.jpg"
-)
+SAMPLE_CANDIDATES = [
+    Path(__file__).parent / "samples" / "dented_car.png",
+    Path(__file__).parent / "dented_car.png",
+]
+
+
+def find_sample_image() -> Path:
+    for path in SAMPLE_CANDIDATES:
+        if path.exists():
+            return path
+    raise FileNotFoundError(
+        "No sample image found. Put dented_car.png in nebius/ or nebius/samples/"
+    )
 
 
 def main() -> int:
@@ -19,8 +28,12 @@ def main() -> int:
         print("SKIP: NEBIUS_API_KEY not set. Copy .env.example → .env and add key.")
         return 0
 
+    sample = find_sample_image()
+    print(f"Using local sample: {sample}")
+    image_data_uri = image_path_to_data_uri(str(sample))
+
     result = analyze_incident(
-        image_url=TEST_IMAGE,
+        image_url=image_data_uri,
         incident_type="car_accident",
         raw_transcript=(
             "I was rear-ended at a stop light. I'm okay but my car is damaged."
